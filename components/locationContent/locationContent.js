@@ -63,7 +63,12 @@ const InfoContent = styled.div`
   align-content: center;
 `;
 const InfoContentStuff = styled.div`
-    text-
+    display: flex;
+    justify-content:center;
+    align-content:center; 
+    text-align: center;
+    padding: 20px;  
+    top: 50%;
 `;
 const HeatmapButton = styled.button`
   background-color: #f4511e;
