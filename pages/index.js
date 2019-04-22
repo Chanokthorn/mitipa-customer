@@ -16,7 +16,7 @@ const secret = require("../secret");
 library.add(faCircle, faBookReader);
 
 AWS.config.update({
-  secret
+  ...secret
 });
 
 const AllContent = styled.div`
@@ -33,6 +33,7 @@ const FinalPageHeader = styled(PageHeader)`
 `;
 const PageContent = styled.div`
   display: grid;
+  height: 100%;
   grid-template-columns: 50% 50%;
   grid-template-areas: "list info";
   grid-area: content;
