@@ -11,7 +11,7 @@ import AWS from "aws-sdk";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 import { faCircle, faBookReader } from "@fortawesome/free-solid-svg-icons";
-const secret = require("../config");
+const secret = require("../secret");
 
 library.add(faCircle, faBookReader);
 
