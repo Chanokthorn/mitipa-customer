@@ -137,21 +137,16 @@ class LocationContent extends React.Component {
     const yLabels = new Array(5).fill(0).map((_, i) => `${i}`);
     ///////////////////////////
 
-    let data = null;
+    var data = null;
     if (heatMapState != 0) {
-      let data = selectedLocationInfo[this.heatMapKeyEnum[heatMapState]];
+      data = selectedLocationInfo[this.heatMapKeyEnum[heatMapState]];
     }
 
-    let person_state = {
-      ENTER: 0,
-      LEAVE: 0,
-      LOOP_LEAVE: 0,
-      SITTING: 8,
-      TEMP_LEAVE: 0,
-      WANDERING: 1
-    };
 
-    let person_state_key = Object.keys(person_state);
+    if(selectedLocationInfo != null){
+      var person_state = selectedLocationInfo.person_state
+      var person_state_key = Object.keys(person_state);
+    }
 
     return (
       <InfoWrapper className="infowrapper">
@@ -184,13 +179,7 @@ class LocationContent extends React.Component {
               </InfoImageContainer>
 
               <InfoContentContainer>
-                {/* <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "20px"
-                  }}
-                > */}
+              
                 <HeatmapButton
                   onClick={this.onClickHeatMapButton}
                   style={{
@@ -199,7 +188,6 @@ class LocationContent extends React.Component {
                 >
                   {this.heatMapStateEnum[heatMapState]}
                 </HeatmapButton>
-                {/* </div> */}
 
                 <InfoContent>
                   {person_state_key.map(key => (
