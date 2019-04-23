@@ -57,25 +57,25 @@ const InfoImage = styled.img`
 const InfoContent = styled.div`
   grid-area: content;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-size: 1.2vw;
   justify-content: center;
-  align-content: center;
-  align-self: center;
-  overflow-x: scroll;
-  width: 500px;
-  padding: 20px;
+  align-content: top;
+  align-self: top;
+  // width: 500px;
+  // padding: 20px;
 `;
 
 const InfoContentStuff = styled.div`
-    display: flex;
-    justify-content:center;
-    align-content:center; 
-    text-align: center;
-    align-self: center;
-    padding: 20px
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  align-self: center;
+  padding: 5px;
 `;
 const HeatmapButton = styled.button`
+  grid-area: button
   color: black;
   padding: 1em 1em;
   border-radius: 5px;
@@ -94,20 +94,19 @@ const HeatmapButton = styled.button`
 `;
 
 const InfoContentContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 50px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: "button content";
 `;
 
 class LocationContent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.heatMapStateEnum = ['Default', 'Existence', 'Sitting'];
-    this.heatMapKeyEnum = [null, 'existence_heatmap', 'sitting_heatmap'];
+    this.heatMapStateEnum = ["Default", "Existence", "Sitting"];
+    this.heatMapKeyEnum = [null, "existence_heatmap", "sitting_heatmap"];
     this.s3URL = "https://s3-ap-northeast-1.amazonaws.com/mitipa-images/";
-    this.buttonColor = ['#fc9b7a', '#51a1c4', '#e0d2ac']
+    this.buttonColor = ["#fc9b7a", "#51a1c4", "#e0d2ac"];
 
     this.state = {
       loaded: false,
@@ -118,16 +117,16 @@ class LocationContent extends React.Component {
   onClickHeatMapButton = () => {
     this.setState({
       heatMapState: (this.state.heatMapState + 1) % this.heatMapStateEnum.length
-    })
-  }
+    });
+  };
 
   componentDidMount() {}
 
   render() {
     const { selectedLocationInfo } = this.props;
-    const {heatMapState} = this.state;
+    const { heatMapState } = this.state;
     console.log("selectedLocationInfo: ", selectedLocationInfo);
-    
+
     /////////////////////////
     const xLabels = new Array(10).fill(0).map((_, i) => `${i}`);
     // Display only even labels
@@ -137,20 +136,20 @@ class LocationContent extends React.Component {
 
     const yLabels = new Array(5).fill(0).map((_, i) => `${i}`);
     ///////////////////////////
-    
+
     let data = null;
-    if(heatMapState != 0){
+    if (heatMapState != 0) {
       let data = selectedLocationInfo[this.heatMapKeyEnum[heatMapState]];
     }
 
-    let person_state =  {
-        "ENTER": 0,
-        "LEAVE": 0,
-        "LOOP_LEAVE": 0,
-        "SITTING": 8,
-        "TEMP_LEAVE": 0,
-        "WANDERING": 1
-      }
+    let person_state = {
+      ENTER: 0,
+      LEAVE: 0,
+      LOOP_LEAVE: 0,
+      SITTING: 8,
+      TEMP_LEAVE: 0,
+      WANDERING: 1
+    };
 
     let person_state_key = Object.keys(person_state);
 
@@ -163,7 +162,7 @@ class LocationContent extends React.Component {
               <InfoImageContainer>
                 <InfoImage src={this.s3URL + selectedLocationInfo.image} />
                 <HeatMapOverlay>
-                  {data == null ? null : 
+                  {data == null ? null : (
                     <HeatMap
                       xLabels={xLabels}
                       yLabels={yLabels}
@@ -177,41 +176,39 @@ class LocationContent extends React.Component {
                           (max - value) / (max - min)})`,
                         color: "#000"
                       })}
-                    
+
                       // cellRender={value => value && `${value}%`}
                     />
-                  }
+                  )}
                 </HeatMapOverlay>
               </InfoImageContainer>
-              
+
               <InfoContentContainer>
-                <div style = {{
-                  display:"flex",
-                  justifyContent:"center",
-                  padding: "20px"
-                }}>
-                  <HeatmapButton
-                    onClick = {this.onClickHeatMapButton}
-                    style={{
-                      backgroundColor:this.buttonColor[heatMapState]
-                    }}
-                  >{this.heatMapStateEnum[heatMapState]}</HeatmapButton>         
-                </div>
-                
+                {/* <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "20px"
+                  }}
+                > */}
+                <HeatmapButton
+                  onClick={this.onClickHeatMapButton}
+                  style={{
+                    backgroundColor: this.buttonColor[heatMapState]
+                  }}
+                >
+                  {this.heatMapStateEnum[heatMapState]}
+                </HeatmapButton>
+                {/* </div> */}
+
                 <InfoContent>
-                {
-                  person_state_key.map( key => (
-                      <InfoContentStuff>
-                        {key}: {person_state[key]}
-                      </InfoContentStuff>  
-                  ))
-                }
+                  {person_state_key.map(key => (
+                    <InfoContentStuff>
+                      {key}: {person_state[key]}
+                    </InfoContentStuff>
+                  ))}
                 </InfoContent>
-
               </InfoContentContainer>
-
-              
-             
             </Infos>
           </Fade>
         )}
