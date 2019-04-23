@@ -62,14 +62,18 @@ const InfoContent = styled.div`
   justify-content: center;
   align-content: center;
   align-self: center;
+  overflow-x: scroll;
+  width: 500px;
+  padding: 20px;
 `;
+
 const InfoContentStuff = styled.div`
     display: flex;
     justify-content:center;
     align-content:center; 
     text-align: center;
     align-self: center;
-    padding: 20px;  
+    padding: 20px
 `;
 const HeatmapButton = styled.button`
   color: black;
@@ -85,8 +89,15 @@ const HeatmapButton = styled.button`
   &:hover {
     opacity: 1;
   }
-  height: 100px;
-  width: 100px;
+  height: 120px;
+  width: 120px;
+`;
+
+const InfoContentContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 50px;
 `;
 
 class LocationContent extends React.Component {
@@ -132,6 +143,16 @@ class LocationContent extends React.Component {
       let data = selectedLocationInfo[this.heatMapKeyEnum[heatMapState]];
     }
 
+    let person_state =  {
+        "ENTER": 0,
+        "LEAVE": 0,
+        "LOOP_LEAVE": 0,
+        "SITTING": 8,
+        "TEMP_LEAVE": 0,
+        "WANDERING": 1
+      }
+
+    let person_state_key = Object.keys(person_state);
 
     return (
       <InfoWrapper className="infowrapper">
@@ -162,17 +183,35 @@ class LocationContent extends React.Component {
                   }
                 </HeatMapOverlay>
               </InfoImageContainer>
-              <InfoContent>
-                <HeatmapButton
-                  onClick = {this.onClickHeatMapButton}
-                  style={{
-                    backgroundColor:this.buttonColor[heatMapState]
-                  }}
-                >{this.heatMapStateEnum[heatMapState]}</HeatmapButton>
-                <InfoContentStuff>
-                  score: {selectedLocationInfo.score}
-                </InfoContentStuff>
-              </InfoContent>
+              
+              <InfoContentContainer>
+                <div style = {{
+                  display:"flex",
+                  justifyContent:"center",
+                  padding: "20px"
+                }}>
+                  <HeatmapButton
+                    onClick = {this.onClickHeatMapButton}
+                    style={{
+                      backgroundColor:this.buttonColor[heatMapState]
+                    }}
+                  >{this.heatMapStateEnum[heatMapState]}</HeatmapButton>         
+                </div>
+                
+                <InfoContent>
+                {
+                  person_state_key.map( key => (
+                      <InfoContentStuff>
+                        {key}: {person_state[key]}
+                      </InfoContentStuff>  
+                  ))
+                }
+                </InfoContent>
+
+              </InfoContentContainer>
+
+              
+             
             </Infos>
           </Fade>
         )}
