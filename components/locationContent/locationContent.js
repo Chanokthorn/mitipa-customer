@@ -61,66 +61,77 @@ const InfoContent = styled.div`
   font-size: 1.2vw;
   justify-content: center;
   align-content: center;
+  align-self: center;
 `;
 const InfoContentStuff = styled.div`
     display: flex;
     justify-content:center;
     align-content:center; 
     text-align: center;
+    align-self: center;
     padding: 20px;  
-    top: 50%;
 `;
 const HeatmapButton = styled.button`
-  background-color: #f4511e;
-  color: white;
-  padding: 0.5em 0.5em;
-  border: 2px solid #f4511e;
+  color: black;
+  padding: 1em 1em;
   border-radius: 5px;
   text-align: center;
   font-size: 1.2vw;
-  opacity: 0.6;
+  opacity: 0.8;
   transition: 0.3s;
   display: inline-block;
   text-decoration: none;
-  cursor: pointer;
+  // cursor: pointer;
   &:hover {
     opacity: 1;
   }
+  height: 100px;
+  width: 100px;
 `;
 
 class LocationContent extends React.Component {
   constructor(props) {
     super(props);
+
+    this.heatMapStateEnum = ['Default', 'Existence', 'Sitting'];
+    this.heatMapKeyEnum = [null, 'existence_heatmap', 'sitting_heatmap'];
+    this.s3URL = "https://s3-ap-northeast-1.amazonaws.com/mitipa-images/";
+    this.buttonColor = ['#fc9b7a', '#51a1c4', '#e0d2ac']
+
     this.state = {
-      selectedLocationInfo: props.selectedLocationInfo,
-      s3Client: props.s3Client,
-      s3URL: "https://s3-ap-northeast-1.amazonaws.com/mitipa-images/",
-      loaded: false
+      loaded: false,
+      heatMapState: 0
     };
   }
 
+  onClickHeatMapButton = () => {
+    this.setState({
+      heatMapState: (this.state.heatMapState + 1) % this.heatMapStateEnum.length
+    })
+  }
+
   componentDidMount() {}
+
   render() {
-    const { s3URL } = this.state;
     const { selectedLocationInfo } = this.props;
+    const {heatMapState} = this.state;
     console.log("selectedLocationInfo: ", selectedLocationInfo);
+    
     /////////////////////////
     const xLabels = new Array(10).fill(0).map((_, i) => `${i}`);
-
     // Display only even labels
     const xLabelsVisibility = new Array(10)
       .fill(0)
       .map((_, i) => (i % 2 === 0 ? true : false));
 
     const yLabels = new Array(5).fill(0).map((_, i) => `${i}`);
-    const data = new Array(yLabels.length)
-      .fill(0)
-      .map(() =>
-        new Array(xLabels.length)
-          .fill(0)
-          .map(() => Math.floor(Math.random() * 100))
-      );
-    //////////////////
+    ///////////////////////////
+    
+    let data = null;
+    if(heatMapState != 0){
+      let data = selectedLocationInfo[this.heatMapKeyEnum[heatMapState]];
+    }
+
 
     return (
       <InfoWrapper className="infowrapper">
@@ -129,28 +140,35 @@ class LocationContent extends React.Component {
             <Infos className="infos">
               <InfoHeader>{selectedLocationInfo.location}</InfoHeader>
               <InfoImageContainer>
-                <InfoImage src={s3URL + selectedLocationInfo.image} />
+                <InfoImage src={this.s3URL + selectedLocationInfo.image} />
                 <HeatMapOverlay>
-                  <HeatMap
-                    xLabels={xLabels}
-                    yLabels={yLabels}
-                    data={data}
-                    height={50}
-                    squares
-                    //   xLabelWidth={200}
-                    //   yLabelWidth={200}
-                    cellStyle={(background, value, min, max, data, x, y) => ({
-                      background: `rgb(0, 151, 230, ${1 -
-                        (max - value) / (max - min)})`,
-                      color: "#000"
-                    })}
-
-                    // cellRender={value => value && `${value}%`}
-                  />
+                  {data == null ? null : 
+                    <HeatMap
+                      xLabels={xLabels}
+                      yLabels={yLabels}
+                      data={data}
+                      height={50}
+                      squares
+                      //   xLabelWidth={200}
+                      //   yLabelWidth={200}
+                      cellStyle={(background, value, min, max, data, x, y) => ({
+                        background: `rgb(0, 151, 230, ${1 -
+                          (max - value) / (max - min)})`,
+                        color: "#000"
+                      })}
+                    
+                      // cellRender={value => value && `${value}%`}
+                    />
+                  }
                 </HeatMapOverlay>
               </InfoImageContainer>
               <InfoContent>
-                <HeatmapButton>Existence Heatmap</HeatmapButton>
+                <HeatmapButton
+                  onClick = {this.onClickHeatMapButton}
+                  style={{
+                    backgroundColor:this.buttonColor[heatMapState]
+                  }}
+                >{this.heatMapStateEnum[heatMapState]}</HeatmapButton>
                 <InfoContentStuff>
                   score: {selectedLocationInfo.score}
                 </InfoContentStuff>
