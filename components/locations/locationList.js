@@ -7,7 +7,7 @@ const LocationsContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  max-height: 40vh;
+  max-height: 100vh;
 `;
 
 class LocationList extends React.Component {

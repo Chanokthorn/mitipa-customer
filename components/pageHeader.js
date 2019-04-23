@@ -4,17 +4,19 @@ import Fade from "react-reveal/Fade";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MitipaHeader = styled.div`
-  //   top: 0;
   width: 100%;
-  height: 20%;
+  height: 100%;
   background-color: white;
   font-size: 300%;
+  display: flex;
+  justify-content: center;
 `;
 
 const HeaderContent = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
+  align-items: center;
   font-size: 10vw;
   font-family: Arial, Helvetica, sans-serif;
 `;

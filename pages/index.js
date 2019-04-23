@@ -23,7 +23,7 @@ const AllContent = styled.div`
   display: grid;
   height: 100vh;
   width: 100%;
-  grid-template-rows: 30% 70%;
+  grid-template-rows: 15% 85%;
   grid-template-areas:
     "header"
     "content";
@@ -51,9 +51,9 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dyanmoClient: null,
+      dynamoClient: null,
       s3Client: null,
-      selectedLocationInfo: null
+      selectedLocationInfo: null,
     };
   }
   componentDidMount = () => {

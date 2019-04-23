@@ -18,7 +18,7 @@ const Infos = styled.div`
     "content";
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2vw;
-    height: 60vh;
+  height: 60vh;
 `;
 
 const InfoHeader = styled.div`
@@ -72,9 +72,10 @@ const InfoContentStuff = styled.div`
 `;
 const HeatmapButton = styled.button`
   background-color: #f4511e;
-  border: none;
   color: white;
-  //   padding: 0.5vw 1vw;
+  padding: 0.5em 0.5em;
+  border: 2px solid #f4511e;
+  border-radius: 5px;
   text-align: center;
   font-size: 1.2vw;
   opacity: 0.6;
