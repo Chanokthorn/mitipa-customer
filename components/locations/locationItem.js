@@ -45,7 +45,7 @@ const LocationItem = props => {
       <CardHeader>
         <FontAwesomeIcon
           icon="circle"
-          color={props.location.score > 10 ? "red" : "green"}
+          color={props.location.person_state.LOOP_LEAVE > 3 ? "red" : "green"}
           size="small"
           key={"icon-" + props.index}
         />
