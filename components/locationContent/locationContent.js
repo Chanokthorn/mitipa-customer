@@ -156,9 +156,21 @@ class LocationContent extends React.Component {
         data_sum += this.arrSum(row);
       });
     }
+    // if (selectedLocationInfo != null) {
+    //   var person_state = selectedLocationInfo.person_state;
+    //   var person_state_key = Object.keys(person_state);
+
+    var person_state = {
+      LEAVE: 0,
+      SITTING: 0,
+      ENTER: 0,
+      LOOP_LEAVE: 0,
+      WANDERING: 0,
+      TEMP_LEAVE: 0
+    };
+    var person_state_key = Object.keys(person_state);
     if (selectedLocationInfo != null) {
       var person_state = selectedLocationInfo.person_state;
-      var person_state_key = Object.keys(person_state);
     }
 
     return (
